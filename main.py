@@ -12,6 +12,7 @@ from geographic_analysis import analyze_geographic_distribution
 from income_analysis import analyze_income_poverty_relation
 from sample_data_generator import save_sample_data
 from averages import calculate_averages
+from correlation_matrix import correlation_matrix
 
 def create_output_dir():
     """Create output directory for visualizations if it doesn't exist"""
@@ -34,6 +35,8 @@ def main():
 
     # print averages
     calculate_averages(data)
+
+    correlation_matrix(data)
     
     # Run various analyses
     print("Analyzing rent distribution...")
