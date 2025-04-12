@@ -72,24 +72,23 @@ def rent_to_income_ratio(df):
     for i, state in enumerate(states):
         state_data = df[df['state'] == state]
         plt.scatter(
-            state_data['median_incomeE'], 
-            state_data['median_rentE'],
+            state_data['poverty_rate'], 
+            state_data['rent_burden'],
             color=colors[i],
             alpha=0.7,
             label=state,
-            s=state_data['total_popE'] / 5000  # Size based on population
+            # s=state_data['total_popE'] / 5000  # Size based on population
         )
+        # Add a trend line
+        x = state_data['poverty_rate']
+        y = state_data['rent_burden']
+        z = np.polyfit(x, y, 1)
+        p = np.poly1d(z)
+        plt.plot(x, p(x), alpha=0.6, color=colors[i])
     
-    # Add a trend line
-    x = df['median_incomeE']
-    y = df['median_rentE']
-    z = np.polyfit(x, y, 1)
-    p = np.poly1d(z)
-    plt.plot(x, p(x), "r--", alpha=0.8)
-    
-    plt.title('Relationship Between Median Income and Median Rent')
-    plt.xlabel('Median Annual Income ($)')
-    plt.ylabel('Median Monthly Rent ($)')
+    plt.title('Relationship Between Rent Burden and Poverty Rate')
+    plt.xlabel('Poverty Rate')
+    plt.ylabel('Median Monthly Rent Burden (\$Rent / \$Income)')
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend(title='State')
     
@@ -99,18 +98,17 @@ def rent_to_income_ratio(df):
     
     # Create histogram of rent burden percentage
     plt.figure(figsize=(12, 8))
-    
+
     # Remove outliers for better visualization
     rent_burden = df['rent_burden'].copy()
-    rent_burden = rent_burden[rent_burden < rent_burden.quantile(0.95)]
-    
+
     sns.histplot(rent_burden, bins=20, kde=True)
     plt.axvline(x=30, color='r', linestyle='--', label='30% Threshold')
     plt.title('Distribution of Rent Burden (Monthly Rent as % of Monthly Income)')
     plt.xlabel('Rent Burden (%)')
     plt.ylabel('Number of Counties')
     plt.legend()
-    
+
     plt.tight_layout()
     plt.savefig('visualizations/rent_burden_distribution.png')
     plt.close()
