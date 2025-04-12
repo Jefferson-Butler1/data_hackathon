@@ -34,7 +34,7 @@ The dataset contains information about Section 8 housing across different counti
 1. Ensure you have Python 3.6+ installed
 2. Install required dependencies:
    ```
-   pip install pandas numpy matplotlib seaborn
+   pip3 install -r requirements.txt
    ```
 3. Run the setup script:
    ```
